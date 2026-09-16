@@ -17,7 +17,7 @@ static ht_item* ht_new_item(const char* k, const char* v)
 
 
 // Initialise a new hash table
-/
+
 
 ht_hash_table* ht_new()
 {
@@ -25,5 +25,42 @@ ht_hash_table* ht_new()
 
 	ht->size = 53; // Define how many items we can store.
         ht->count = 0;
-	ht->items= calloc(
+	ht->items= calloc((size_t)ht->size, sizeof(ht_item*));
+
+	return ht;
+}
+
+static void ht_del_item(ht_item* i)
+{
+	// Function that delete hash-table items and free the allocated memory 
+	// Preventing memory leaks
+	free(i->key);
+	free(i->value);
+	free(i);
+}
+
+
+void ht_del_hash_table(ht_hash_table* ht)
+{
+	for(int i = 0; i < ht->size; i++)
+	{
+		ht_item* item = ht->items[i];
+		if(item != NULL){
+			ht_del_item(item);
+		}
+	}
+
+	free(ht->items);
+	free(ht);
+}
+
+
+
+int main()
+{
+	ht_hash_table* ht = ht_new();
+        ht_del_hash_table(ht);
+
+
+	return 0;
 }
