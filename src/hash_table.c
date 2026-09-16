@@ -54,7 +54,20 @@ void ht_del_hash_table(ht_hash_table* ht)
 	free(ht);
 }
 
+// Hash Function 
 
+static int ht_hash(const char* s, const int a, const int m)
+{
+	long hash = 0;
+	const int s_len = strlen(s);
+	for(int i = 0; i< s_len; i++)
+	{
+		hash += (long)pow(a,s_len -(i+1)) *s[i];
+		hash = hash  % m;
+	}
+
+	return (int)hash;
+}
 
 int main()
 {
